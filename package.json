@@ -1,7 +1,7 @@
 {
   "name": "file-manager",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "src/index.js",
   "scripts": {
     "start": "node src/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -10,12 +10,16 @@
     "type": "git",
     "url": "git+https://github.com/MikhailMaidan/node-file-manager.git"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": [
+    "cli",
+    "file-manager",
+    "nodejs"
+  ],
+  "author": "MikhailMaidan",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/MikhailMaidan/node-file-manager/issues"
   },
   "homepage": "https://github.com/MikhailMaidan/node-file-manager#readme",
-  "description": ""
+  "description": "File Manager based on CLI realized via basic APIs of NodeJs"
 }
