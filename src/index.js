@@ -3,6 +3,7 @@ const os = require("os");
 const path = require("path");
 const fs = require("fs");
 const crypto = require("crypto");
+const zlib = require("zlib");
 
 const args = process.argv.slice(2);
 const usernameArg = args.find((arg) => arg.startsWith("--username="));
@@ -298,6 +299,76 @@ rl.on("line", (line) => {
         console.log(`You are currently in ${process.cwd()}`);
         rl.prompt();
       });
+    } catch {
+      console.log("Operation failed");
+      console.log(`You are currently in ${process.cwd()}`);
+      rl.prompt();
+    }
+    return;
+  }
+
+  if (input.startsWith("compress ")) {
+    const [, , srcRaw, destRaw] = input.split(" ");
+    const src = path.isAbsolute(srcRaw)
+      ? srcRaw
+      : path.resolve(process.cwd(), srcRaw);
+    const dest = path.isAbsolute(destRaw)
+      ? destRaw
+      : path.resolve(process.cwd(), destRaw);
+    try {
+      const rs = fs.createReadStream(src);
+      const ws = fs.createWriteStream(dest);
+      const brotli = zlib.createBrotliCompress();
+      rs.on("error", () => {
+        console.log("Operation failed");
+        console.log(`You are currently in ${process.cwd()}`);
+        rl.prompt();
+      });
+      ws.on("error", () => {
+        console.log("Operation failed");
+        console.log(`You are currently in ${process.cwd()}`);
+        rl.prompt();
+      });
+      ws.on("finish", () => {
+        console.log(`You are currently in ${process.cwd()}`);
+        rl.prompt();
+      });
+      rs.pipe(brotli).pipe(ws);
+    } catch {
+      console.log("Operation failed");
+      console.log(`You are currently in ${process.cwd()}`);
+      rl.prompt();
+    }
+    return;
+  }
+
+  if (input.startsWith("decompress ")) {
+    const [, , srcRaw, destRaw] = input.split(" ");
+    const src = path.isAbsolute(srcRaw)
+      ? srcRaw
+      : path.resolve(process.cwd(), srcRaw);
+    const dest = path.isAbsolute(destRaw)
+      ? destRaw
+      : path.resolve(process.cwd(), destRaw);
+    try {
+      const rs = fs.createReadStream(src);
+      const ws = fs.createWriteStream(dest);
+      const brotli = zlib.createBrotliDecompress();
+      rs.on("error", () => {
+        console.log("Operation failed");
+        console.log(`You are currently in ${process.cwd()}`);
+        rl.prompt();
+      });
+      ws.on("error", () => {
+        console.log("Operation failed");
+        console.log(`You are currently in ${process.cwd()}`);
+        rl.prompt();
+      });
+      ws.on("finish", () => {
+        console.log(`You are currently in ${process.cwd()}`);
+        rl.prompt();
+      });
+      rs.pipe(brotli).pipe(ws);
     } catch {
       console.log("Operation failed");
       console.log(`You are currently in ${process.cwd()}`);
